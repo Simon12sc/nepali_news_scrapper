@@ -1,0 +1,47 @@
+Annabell's News Scraper
+
+This Python script provides a set of methods to extract news information from various news websites. The `Scrap_news_owl` class contains several static methods that allow fetching news articles from different sources, categories, and search queries. These methods return essential information such as the title, image link, article link, author, description, and publication date.
+
+Requirements:
+- Python 3.x
+- `requests` library
+- `BeautifulSoup` library (from `bs4` package)
+
+Usage:
+1. Import required modules:
+   import requests
+   from bs4 import BeautifulSoup
+
+2. Define the `Scrap_news_owl` class with static methods:
+   class Scrap_news_owl:
+       # ... (static method implementations) ...
+
+3. To use the scraper, create an instance of `Scrap_news_owl`:
+
+   news_scraper = Scrap_news_owl()
+
+   # Example usage: Fetch news from various sources
+   kantipur_news = news_scraper.kantipur()
+   online_khabar_news = news_scraper.online_khabar()
+   hamro_patro_news = news_scraper.hamro_patro()
+   annapurna_post_news = news_scraper.annapurna_post()
+
+Method Parameters:
+Each static method accepts specific parameters:
+- `kantipur(date1=None)`: Fetches news articles from the Kantipur website.
+- `online_khabar(page=1)`: Fetches news articles from Online Khabar website.
+- `hamro_patro(search_title="latest", switch=0)`: Fetches news articles from Hamro Patro website.
+- `annapurna_post(page=None, category=None, search=None)`: Fetches news articles from Annapurna Post website.
+
+Returned Data:
+The methods return a list of dictionaries, each containing relevant news information based on the source:
+- For Kantipur: Title, link, author, description, image link, and publication date.
+- For Online Khabar: Title, link, image link, author, description, and publication date.
+- For Hamro Patro: Title, link, author, description, and publication date.
+- For Annapurna Post: Title, link, and image link.
+
+Contributing:
+Contributions to enhance and extend this news scraper are welcome! Feel free to submit pull requests for improvements or bug fixes.
+
+License:
+This project is licensed under the [MIT License](LICENSE).

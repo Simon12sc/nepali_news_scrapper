@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>News Website</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 15px;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #00aaff;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+      }
+
+      .search-section {
+        margin: 0 auto;
+        max-width: 400px;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+      }
+
+      .news-box {
+        min-width: 300px;
+        width: 30%;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center align content */
+      }
+
+      .news-box img {
+        max-width: 100%;
+        height: auto; /* Ensure proportional scaling */
+        margin: 10px 0; /* Add some space around the image */
+      }
+
+      .button-container {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      input {
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: none;
+        padding: 5px 10px;
+      }
+
+      button {
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        width: 60px;
+      }
+      button:hover {
+        color: white;
+        background: #04a3d8;
+      }
+      /* Responsive font sizes using media queries */
+      @media screen and (max-width: 768px) {
+        .news-box h2 {
+          font-size: 18px;
+        }
+
+        .news-box p {
+          font-size: 14px;
+        }
+
+        .button-container a {
+          font-size: 12px;
+          word-break: break-all;
+        }
+        input {
+          width: 200px;
+        }
+      }
+
+      a {
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>News Website scrapper</h1>
+      <a href="https://www.facebook.com/profile.php?id=100088739157868">
+        <p>Developer: Simon Chaudhary</p>
+      </a>
+      <div class="search-section">
+        <input type="text" id="searchInput" placeholder="Search..." />
+        <button id="searchButton">Search</button>
+      </div>
+    </header>
+    <main id="newsContainer" class="container"></main>
+    <script>
+      const newsData = [
+        {
+          author: "https://www.onlinekhabar.com",
+          date: "2023/08",
+          description: " ",
+          image_link:
+            "https://www.onlinekhabar.com/wp-content/uploads/2023/08/Pregnancy-Period1-270x170.jpg",
+          link: "https://www.onlinekhabar.com/2023/08/1355872",
+          title: "गर्भावस्थामा तनाव लिंदा शिशुलाई पर्न सक्छ असर",
+        },
+        {
+          author: "https://www.onlinekhabar.com",
+          date: "2023/08",
+          description: " ",
+          image_link:
+            "https://www.onlinekhabar.com/wp-content/uploads/2023/08/image-4-4-270x170.png",
+          link: "https://www.onlinekhabar.com/2023/08/1355328",
+          title: "सन्चोको प्रयोग गर्दा यी कुरामा ख्याल राख्नुपर्छ",
+        },
+        {
+          author: "https://www.onlinekhabar.com",
+          date: "2023/08",
+          description: " ",
+          image_link:
+            "https://www.onlinekhabar.com/wp-content/uploads/2023/08/image-1-8-270x170.png",
+          link: "https://www.onlinekhabar.com/2023/08/1355274",
+          title: "अल्सरको उपचार कसरी गर्ने ?",
+        },
+      ];
+
+      const newsContainer = document.getElementById("newsContainer");
+
+      function createNewsBox(news) {
+        const newsBox = document.createElement("div");
+        newsBox.className = "news-box";
+
+        if (news.image_link) {
+          const image = document.createElement("img");
+          image.src = news.image_link;
+          newsBox.appendChild(image);
+        }
+
+        const title = document.createElement("h2");
+        title.textContent = news.title;
+        newsBox.appendChild(title);
+
+        const author = document.createElement("p");
+        author.textContent = "Author: " + news.author;
+        newsBox.appendChild(author);
+
+        const description = document.createElement("p");
+        description.textContent = news.description;
+        newsBox.appendChild(description);
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "button-container";
+
+        const readMoreButton = document.createElement("a");
+        readMoreButton.href = news.link;
+        readMoreButton.textContent = "Read More";
+        readMoreButton.target = "_blank";
+        buttonContainer.appendChild(readMoreButton);
+
+        newsBox.appendChild(buttonContainer);
+
+        return newsBox;
+      }
+
+      function displayNews(newsArray) {
+        newsContainer.innerHTML = "";
+        newsArray.forEach((news) => {
+          const newsBox = createNewsBox(news);
+          newsContainer.appendChild(newsBox);
+        });
+      }
+
+      function showLoading() {
+        newsContainer.innerHTML =
+          "<p>Scrapping data from different website please wait !!</p>";
+      }
+
+      displayNews(newsData);
+
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+
+      searchButton.addEventListener("click", async () => {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm !== "") {
+          find(searchTerm);
+        }
+        searchInput.value = "";
+      });
+
+      find("news");
+
+      async function find(searchTerm) {
+        const searchURL = `/search?search=${encodeURIComponent(searchTerm)}`;
+
+        showLoading();
+
+        try {
+          const response = await fetch(searchURL);
+          const searchData = await response.json();
+
+          if (searchData && Array.isArray(searchData)) {
+            displayNews(searchData);
+          } else {
+            newsContainer.innerHTML = "<p>No results found.</p>";
+          }
+        } catch (error) {
+          newsContainer.innerHTML = "<p>Error loading data.</p>";
+          console.error("Error fetching data:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
